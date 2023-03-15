@@ -1,0 +1,19 @@
+{
+  "name": "dataextractorservice",
+  "version": "1.0.0",
+  "description": "extracts data from deployment events and store them in a data store",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajesh-ndv/dataExtractorService.git"
+  },
+  "author": "Rajesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajesh-ndv/dataExtractorService/issues"
+  },
+  "homepage": "https://github.com/rajesh-ndv/dataExtractorService#readme"
+}
