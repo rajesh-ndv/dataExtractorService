@@ -15,19 +15,23 @@ if(!env || !env.parsed || !env.parsed.MONGODB_URI){
 
 const octokit = new Octokit({
   auth: env.parsed.GITHUB_TOKEN
-})
+});
 
-octokit.request('GET /repos/{owner}/{repo}/deployments', {
-  owner: 'rajesh-ndv',
-  repo: 'authenticationMS',
-  headers: {
-    'X-GitHub-Api-Version': '2022-11-28'
-  }
-}).then(function success(oData){
-  console.log(JSON.stringify(oData));
-}).catch(function error(oError){
-  console.log(oError);
-})
+// let commitReq = "GET /repos/{owner}/{repo}/commits";
+
+// let deploymentReq = "GET /repos/{owner}/{repo}/deployments";
+
+// octokit.request(commitReq, {
+//   owner: 'rajesh-ndv',
+//   repo: 'authenticationMS',
+//   headers: {
+//     'X-GitHub-Api-Version': '2022-11-28'
+//   }
+// }).then(function success(oData){
+//   console.log(JSON.stringify(oData));
+// }).catch(function error(oError){
+//   console.log(oError);
+// })
 
 
  
