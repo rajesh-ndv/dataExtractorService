@@ -6,4 +6,4 @@ var CommitSchema = new mongoose.Schema({
 
 });
 
-module.exports = new mongoose.Model("Commit",CommitSchema);
+module.exports = new mongoose.model("Commit",CommitSchema);

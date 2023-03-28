@@ -2,6 +2,9 @@ const express = require("express");
 const connectDB = require('./db/connection');
 const { Octokit, App } = require("octokit");
 const env = require('dotenv').config({path: __dirname + '/.env'});
+const teamRouter = require("./router/teamRoutes");
+const projectRouter = require("./router/projectRoutes");
+const deploymentRouter = require("./router/deploymentRoutes");
 
 const app = express();
 
@@ -21,7 +24,7 @@ const octokit = new Octokit({
 
 // let deploymentReq = "GET /repos/{owner}/{repo}/deployments";
 
-// octokit.request(commitReq, {
+// octokit.request(deploymentReq, {
 //   owner: 'rajesh-ndv',
 //   repo: 'authenticationMS',
 //   headers: {
@@ -33,6 +36,11 @@ const octokit = new Octokit({
 //   console.log(oError);
 // })
 
+app.use("/api/team", teamRouter);
+
+app.use("/api/project",projectRouter);
+
+app.use("/api/deployments", deploymentRouter)
 
  
 app.listen(3001, () => {

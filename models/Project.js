@@ -4,6 +4,14 @@ var ProjectSchema = new mongoose.Schema({
     
     name: {type: String, required: true},
 
+    team: {
+
+        type: mongoose.Schema.Types.ObjectId,
+
+        ref: 'Team'
+
+    },
+
     deployments: [{
 
         type: mongoose.Schema.Types.ObjectId,
@@ -22,4 +30,4 @@ var ProjectSchema = new mongoose.Schema({
 
 });
 
-module.exports = new mongoose.Model("Project",ProjectSchema);
+module.exports = new mongoose.model("Project",ProjectSchema);
