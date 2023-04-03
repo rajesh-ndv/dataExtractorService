@@ -20,21 +20,21 @@ const octokit = new Octokit({
   auth: env.parsed.GITHUB_TOKEN
 });
 
-// let commitReq = "GET /repos/{owner}/{repo}/commits";
+let commitReq = "GET /repos/{owner}/{repo}/commits";
 
-// let deploymentReq = "GET /repos/{owner}/{repo}/deployments";
+let deploymentReq = "GET /repos/{owner}/{repo}/deployments";
 
-// octokit.request(deploymentReq, {
-//   owner: 'rajesh-ndv',
-//   repo: 'authenticationMS',
-//   headers: {
-//     'X-GitHub-Api-Version': '2022-11-28'
-//   }
-// }).then(function success(oData){
-//   console.log(JSON.stringify(oData));
-// }).catch(function error(oError){
-//   console.log(oError);
-// })
+octokit.request(deploymentReq, {
+  owner: 'rajesh-ndv',
+  repo: 'authenticationMS',
+  headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
+  }
+}).then(function success(oData){
+  console.log(JSON.stringify(oData));
+}).catch(function error(oError){
+  console.log(oError);
+})
 
 app.use("/api/team", teamRouter);
 
