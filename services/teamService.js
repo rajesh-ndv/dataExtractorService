@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const algorithm = "aes256";
 
-const key = "THAGGEDE_LE";
+const key = "MY_SECRET_KEY";
 
 
 function validateTeam(team){
