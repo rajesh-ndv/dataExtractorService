@@ -29,6 +29,7 @@ const octokit = new Octokit({
 // octokit.request(issuesReq, {
 //   owner: 'rajesh-ndv',
 //   repo: 'authenticationMS',
+//   state: 'all',
 //   headers: {
 //     'X-GitHub-Api-Version': '2022-11-28'
 //   }
