@@ -49,8 +49,7 @@ exports.createOrUpdateProject = async function(project){
 
     projectPayload.name = project.projectName;
 
-
-    projectPayload.team = team._id;
+    projectPayload.team = team.name;
 
 
     let projectDocument = await projectModel.findOneAndUpdate(projectFilter,projectPayload,{
@@ -62,37 +61,6 @@ exports.createOrUpdateProject = async function(project){
         upsert: true 
 
     });
-
-
-    let projectsInTeam = team.projects;
-
-    let projectExists = false;
-
-    for(let teamObj in projectsInTeam){
-
-        if(teamObj.project_id == projectDocument._id){
-
-            projectExists = true;
-
-        }
-
-    }
-
-    if(!projectExists) {
-
-        team.projects.push(projectDocument._id);
-
-        await teamModel.findOneAndUpdate(teamFilter,team,{
-
-            returnOriginal: false,
-    
-            new: true,
-    
-            upsert: true 
-    
-        });
-
-    }
 
     let response = {};
 

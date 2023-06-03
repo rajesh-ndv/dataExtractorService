@@ -27,6 +27,8 @@ async function processDeploymentStatusInformation(oOctokit,sDeploymentId,sAuthor
 
         deployment_id: sDeploymentId,
 
+        state: 'all',
+
         headers: {
 
           'X-GitHub-Api-Version': '2022-11-28'
@@ -57,6 +59,8 @@ async function processDeploymentInformationForProject(oProject,oTeam){
 
         repo: oProject.name,
 
+        state: 'all',
+
         headers: {
 
           'X-GitHub-Api-Version': '2022-11-28'
@@ -73,7 +77,7 @@ async function processDeploymentInformationForProject(oProject,oTeam){
 
             for(let j=0;j<oDeploymentStatuses.data.length;j++){
 
-                let oDeploymentFinalObject = createDeploymentInstance(oDeploymentResult.data[i],oDeploymentStatuses.data[j]);
+                let oDeploymentFinalObject = createDeploymentInstance(oDeploymentResult.data[i],oDeploymentStatuses.data[j],oProject.name,oTeam.name);
 
                 oFinalResults.push(oDeploymentFinalObject);
 
@@ -87,7 +91,7 @@ async function processDeploymentInformationForProject(oProject,oTeam){
 
 }
 
-function createDeploymentInstance(oDeploymentResult,oDeploymentStatus) {
+function createDeploymentInstance(oDeploymentResult,oDeploymentStatus,sProjectName,sTeamName) {
 
     let oDeploymentObject = {};
 
@@ -111,13 +115,17 @@ function createDeploymentInstance(oDeploymentResult,oDeploymentStatus) {
 
     oDeploymentObject.productionEnvironment = oDeploymentResult.production_environment;
 
+    oDeploymentObject.teamName = sTeamName;
+    
+    oDeploymentObject.projectName = sProjectName;
+
     return oDeploymentObject;
 
 }
 
 async function processDeploymentForTeam(oTeam){
 
-    let oFilter = { team : oTeam._id };
+    let oFilter = { team : oTeam.name };
 
     let aProjects = await projectModel.find(oFilter);
 

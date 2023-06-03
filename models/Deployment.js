@@ -20,7 +20,11 @@ var DeploymentSchema = new mongoose.Schema({
 
     transientEnvironment: {type: Boolean},
 
-    productionEnvironment: {type: Boolean}
+    productionEnvironment: {type: Boolean},
+
+    teamName: {type: String, required: true},
+
+    projectName: {type: String, required: true}
 
 });
 

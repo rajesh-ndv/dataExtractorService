@@ -8,6 +8,6 @@ const {
  
 const router = express.Router();
  
-router.route("/crawl").get(crawlDeploymentInfo)
+router.route("/crawlDeployments").get(crawlDeploymentInfo)
  
 module.exports = router;
