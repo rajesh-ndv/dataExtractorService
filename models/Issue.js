@@ -16,7 +16,11 @@ var IssueSchema = new mongoose.Schema({
 
     createdAt: {type: Date, required: true},
 
-    closedAt: {type: Date}
+    closedAt: {type: Date},
+
+    teamName: {type: String, required: true},
+
+    projectName: {type: String, required: true}
 
 });
 

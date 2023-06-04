@@ -2,12 +2,12 @@ const express = require("express");
 
 const {
 
-    updateTeamCount
+    updateTeamMetrics
     
 } = require("../controller/visualizationController");
  
 const router = express.Router();
  
-router.route("/updateTeamCount").post(updateTeamCount)
+router.route("/updateTeamMetrics").post(updateTeamMetrics)
  
 module.exports = router;

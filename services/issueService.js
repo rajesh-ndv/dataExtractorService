@@ -88,6 +88,10 @@ function createIssueInstance(oIssue,sProjectName,sTeamName) {
 
     issueObject.closedAt = oIssue.closed_at;
 
+    issueObject.teamName = sTeamName;
+
+    issueObject.projectName = sProjectName;
+
     return issueObject;
 
 }

@@ -1,10 +1,10 @@
 const visualizationService = require("../services/visualizationService");
 
-exports.updateTeamCount = async function (req,res) {
+exports.updateTeamMetrics = async function (req,res) {
 
     try {
 
-        let response = await visualizationService.createTeamCount()
+        let response = await visualizationService.createTeamMetrics()
 
         if(response.status && response.status == "SUCCESS") {
 
