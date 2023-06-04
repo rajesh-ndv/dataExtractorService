@@ -95,7 +95,7 @@ async function processMetricForProject(oProject) {
 }
 
 
-async function precessMetricsForTeam(oTeam) {
+async function processMetricsForTeam(oTeam) {
 
     let oFilter = { team : oTeam.name };
 
@@ -193,7 +193,7 @@ exports.createTeamMetrics = async function() {
 
     for(var i=0;i<aTeams.length;i++) {
 
-        let oResult = await precessMetricsForTeam(aTeams[i]);
+        let oResult = await processMetricsForTeam(aTeams[i]);
 
         aTeamResults.push(oResult);
 
@@ -213,7 +213,7 @@ exports.createTeamMetrics = async function() {
 
     for(var i=0;i<aTeamResults.length;i++) {
 
-        let teamDocument = await teamModel.findOneAndUpdate(filter,team,{
+        let teamDocument = await teamModel.findOneAndUpdate({name: aTeamResults[i].name},aTeamResults[i],{
 
             returnOriginal: false,
     
@@ -237,17 +237,25 @@ exports.createTeamMetrics = async function() {
 
     }
 
+    let n = aTeamResults.length;
+
+    if(n==0 || n==null || n==undefined) {
+
+        n=1;
+
+    }
+
     await organizationCountModel.deleteMany({});
 
     let orgMetrics = {
 
         count: aTeamResults.length,
 
-        deploymentFrequency: depFreq/aTeamResults.length,
+        deploymentFrequency: depFreq/n,
 
-        deploymentSuccessRate: depSuccessRate/aTeamResults.length,
+        deploymentSuccessRate: depSuccessRate/n,
 
-        meanTimeToResolveIssue: mttRate/aTeamResults.length,
+        meanTimeToResolveIssue: mttRate/n,
 
         uncompliantProjects: count,
 
@@ -257,7 +265,13 @@ exports.createTeamMetrics = async function() {
 
     // create organization metric and save it
 
-    await organizationCountModel.create(orgMetrics);
+    let savedData = await organizationCountModel.create(orgMetrics);
+
+    let response = {};
+
+    response.status = "SUCCESS";
+
+    response.data = savedData;
    
     return response;
 

@@ -6,13 +6,13 @@ var ProjectSchema = new mongoose.Schema({
 
     team: {type: String, required: true}, 
 
-    deploymentFrequency: { type: Number},
+    deploymentFrequency: { type: Number, default: 0 },
 
-    deploymentSuccessRate: {type: Number}, 
+    deploymentSuccessRate: {type: Number, default: 0 }, 
 
-    meanTimeToResolveIssue: {type: Number},
+    meanTimeToResolveIssue: {type: Number, default: 0 },
 
-    doraScore: {type: Number}
+    doraScore: {type: Number, default: 0 }
 
 });
 
