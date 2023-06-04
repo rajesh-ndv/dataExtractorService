@@ -6,6 +6,8 @@ const teamRouter = require("./router/teamRoutes");
 const projectRouter = require("./router/projectRoutes");
 const deploymentRouter = require("./router/deploymentRoutes");
 const issueRouter = require('./router/issueRouter');
+const visualizationRouter = require("./router/visualizatonRoutes");
+
 
 const app = express();
 
@@ -47,6 +49,8 @@ app.use("/api/project",projectRouter);
 app.use("/api/deployments", deploymentRouter);
 
 app.use("/api/issues", issueRouter);
+
+app.use("/api/visualization", visualizationRouter);
 
  
 app.listen(3001, () => {
