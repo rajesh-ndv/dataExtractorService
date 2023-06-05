@@ -165,6 +165,8 @@ async function processMetricsForTeam(oTeam) {
 
     oTeam.doraScore = 0.2*depFreq + 0.4*depSuccessRate + 0.4*mttRate;
 
+    oTeam.count = projects.length;
+
     if(oTeam.doraScore<5) {
 
         if(oTeam.uncompliantProjects!=null) {

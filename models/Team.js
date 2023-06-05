@@ -9,6 +9,8 @@ var TeamSchema = new mongoose.Schema({
 
     author: { type:String, required:true },
 
+    count: { type: Number, default: 0},
+
     uncompliantProjects: { type: Number,  default: 0 },
 
     deploymentFrequency: { type: Number, default: 0 },
