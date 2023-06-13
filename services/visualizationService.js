@@ -8,6 +8,43 @@ const issueModel = require("../models/Issue");
 
 const projectModel = require("../models/Project");
 
+const MAX_DEPLOYMENT_FREQUENCY = 10 
+
+const MAX_MEAN_TIME_TO_RESOLVE = 24
+
+function calculateCompositeMetric(deploymentFrequency, successfulDeploymentsPercentage, meanTimeToResolveIssue) {
+
+    // Normalize the metrics
+
+    const normalizedDeploymentFrequency = deploymentFrequency / MAX_DEPLOYMENT_FREQUENCY;
+
+    const normalizedSuccessfulDeploymentsPercentage = successfulDeploymentsPercentage / 100;
+
+    const normalizedMeanTimeToResolveIssue = meanTimeToResolveIssue / MAX_MEAN_TIME_TO_RESOLVE;
+  
+    // Assign weights
+
+    const weightDeploymentFrequency = 0.4;
+
+    const weightSuccessfulDeploymentsPercentage = 0.4;
+
+    const weightMeanTimeToResolveIssue = 0.2;
+  
+    // Calculate the composite metric
+
+    const compositeMetric =
+
+      weightDeploymentFrequency * normalizedDeploymentFrequency +
+
+      weightSuccessfulDeploymentsPercentage * normalizedSuccessfulDeploymentsPercentage +
+
+      weightMeanTimeToResolveIssue * normalizedMeanTimeToResolveIssue;
+  
+    return compositeMetric;
+  }
+  
+  
+
 function calculateDeploymentFrequency(deployments) {
 
     const deploymentCount = deployments.length;
@@ -40,12 +77,12 @@ function calculateDeploymentSuccessRate(deployments) {
 
     }
     
-    const successfulDeployments = deployments.filter(deployment => deployment.state === 'success').length;
+    const successfulDeployments = deployments.filter(deployment => deployment.status === 'success').length;
     
     return (successfulDeployments / totalDeployments) * 100;
 }
 
-async function calculateMTTR(issues) {
+ function calculateMTTR(issues) {
   
     let totalMTTR = 0;
 
@@ -88,7 +125,7 @@ async function processMetricForProject(oProject) {
 
     oProject.meanTimeToResolveIssue = mttRepair;
 
-    oProject.doraScore = 0.2*deploymentFrequency + 0.4*successRate + 0.4*mttRepair;
+    oProject.doraScore = calculateCompositeMetric(deploymentFrequency,successRate,mttRepair)
 
     return oProject;
 
@@ -121,6 +158,10 @@ async function processMetricsForTeam(oTeam) {
 
     let mttRate = 0;
 
+    let doraScore = 0;
+
+    let uncomplianceCount = 0;
+
     let projects = []
 
     for(var i=0;i<aProjects.length;i++) {
@@ -145,6 +186,14 @@ async function processMetricsForTeam(oTeam) {
 
         mttRate = mttRate + projectDocument.meanTimeToResolveIssue ?? 0;
 
+        if(projectDocument.doraScore<5) {
+
+            uncomplianceCount = uncomplianceCount+1;
+
+        }
+
+        doraScore = doraScore + projectDocument.doraScore ?? 0;
+
     }
 
     if(projects.length>0) {
@@ -155,6 +204,8 @@ async function processMetricsForTeam(oTeam) {
 
         mttRate = mttRate/projects.length;
 
+        doraScore = doraScore/projects.length;
+
     }
 
     oTeam.deploymentFrequency = depFreq;
@@ -163,23 +214,11 @@ async function processMetricsForTeam(oTeam) {
 
     oTeam.meanTimeToResolveIssue = mttRate;
 
-    oTeam.doraScore = 0.2*depFreq + 0.4*depSuccessRate + 0.4*mttRate;
+    oTeam.doraScore = doraScore;
 
     oTeam.count = projects.length;
 
-    if(oTeam.doraScore<5) {
-
-        if(oTeam.uncompliantProjects!=null) {
-
-            oTeam.uncompliantProjects = 1+oTeam.uncompliantProjects;
-
-        } else {
-
-            oTeam.uncompliantProjects = 0;
-
-        }
-
-    }
+    oTeam.uncompliantProjects = uncomplianceCount;
 
     return oTeam;
 
@@ -211,6 +250,8 @@ exports.createTeamMetrics = async function() {
 
     let mttRate = 0;
 
+    let doraScore = 0;
+
     let count = 0;
 
     for(var i=0;i<aTeamResults.length;i++) {
@@ -230,6 +271,8 @@ exports.createTeamMetrics = async function() {
         depSuccessRate = depSuccessRate + teamDocument.deploymentSuccessRate ?? 0;
 
         mttRate = mttRate + teamDocument.meanTimeToResolveIssue ?? 0;
+
+        doraScore = doraScore + teamDocument.doraScore ?? 0;
 
         if(teamDocument.doraScore<5) {
 
@@ -259,9 +302,9 @@ exports.createTeamMetrics = async function() {
 
         meanTimeToResolveIssue: mttRate/n,
 
-        uncompliantProjects: count,
+        unCompliantTeams: count,
 
-        doraScore: 0.2*depFreq + 0.4*depSuccessRate + 0.4*mttRate
+        doraScore: doraScore/n
 
     }
 
